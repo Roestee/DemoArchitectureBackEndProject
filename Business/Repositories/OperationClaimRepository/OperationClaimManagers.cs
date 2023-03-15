@@ -21,7 +21,7 @@ namespace Business.Repositories.OperationClaimRepository
         [ValidationAspect(typeof(OperationClaimValidator))]
         public IResult Add(OperationClaim operationClaim)
         {
-            var result = BusinessRules.Run(IsNameAvailable(operationClaim.Name));
+            var result = BusinessRules.Run(IsNameExistToAdd(operationClaim.Name));
             if (result != null) return result;
 
             _operationClaimDal.Add(operationClaim);
@@ -31,6 +31,9 @@ namespace Business.Repositories.OperationClaimRepository
         [ValidationAspect(typeof(OperationClaimValidator))]
         public IResult Update(OperationClaim operationClaim)
         {
+            var result = BusinessRules.Run(IsNameExistToUpdate(operationClaim));
+            if (result != null) return result;
+
             _operationClaimDal.Update(operationClaim);
             return new SuccessResult(OperationClaimMessages.Updated);
         }
@@ -51,11 +54,23 @@ namespace Business.Repositories.OperationClaimRepository
             return new SuccessDataResult<OperationClaim>(_operationClaimDal.Get(p => p.Id == id));
         }
 
-        private IResult IsNameAvailable(string name)
+        private IResult IsNameExistToAdd(string name)
         {
             var result = _operationClaimDal.Get(p => p.Name == name);
             if (result != null)
                 return new ErrorResult(OperationClaimMessages.NameIsNotAvailable);
+
+            return new SuccessResult();
+        } 
+        private IResult IsNameExistToUpdate(OperationClaim operationClaim)
+        {
+            var currentOperationClaim = _operationClaimDal.Get(p => p.Id == operationClaim.Id);
+            if (currentOperationClaim.Name != operationClaim.Name)
+            {
+                var result = _operationClaimDal.Get(p => p.Name == operationClaim.Name);
+                if (result != null)
+                    return new ErrorResult(OperationClaimMessages.NameIsNotAvailable);
+            }
 
             return new SuccessResult();
         }
