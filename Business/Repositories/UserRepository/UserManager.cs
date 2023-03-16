@@ -1,6 +1,7 @@
 ﻿using Business.Repositories.UserRepository.Constans;
 using Business.Repositories.UserRepository.Validation.FluentValidation;
 using Business.Utilities.File;
+using Core.Aspects.Caching;
 using Core.Aspects.Validation;
 using Core.Utilities.Hashing;
 using Core.Utilities.Result.Abstract;
@@ -22,6 +23,7 @@ namespace Business.Repositories.UserRepository
             _fileService = fileService;
         }
 
+        [RemoveCacheAspect("IUserService.GetList")]
         public void Add(RegisterAuthDto registerDto)
         {
             var fileName = _fileService.FileSaveToServer(registerDto.Image, "./Content/Img/");
@@ -83,6 +85,7 @@ namespace Business.Repositories.UserRepository
             return new SuccessResult(UserMessages.DeletedUser);
         }
 
+        [CacheAspect(60)]
         public IDataResult<List<User>> GetList()
         {
             return new SuccessDataResult<List<User>>(_userDal.GetAll());
