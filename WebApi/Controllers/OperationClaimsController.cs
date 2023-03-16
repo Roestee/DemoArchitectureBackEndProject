@@ -47,7 +47,6 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("getList")]
-        [Authorize(Roles = "GetList")]
         public IActionResult GetList()
         {
             var result = _operationClaimService.GetList();
