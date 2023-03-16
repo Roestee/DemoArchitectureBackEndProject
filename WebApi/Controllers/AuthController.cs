@@ -29,7 +29,9 @@ namespace WebApi.Controllers
         public IActionResult Login(LoginAuthDto loginDto)
         {
             var result = _authService.Login(loginDto);
-            return Ok(result);
+            if (result.Success) return Ok(result);
+
+            return BadRequest(result.Message);
         }
     }
 }

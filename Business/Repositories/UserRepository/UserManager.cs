@@ -88,6 +88,11 @@ namespace Business.Repositories.UserRepository
             return new SuccessDataResult<List<User>>(_userDal.GetAll());
         }
 
+        public List<OperationClaim> GetUserOperationClaims(int userId)
+        {
+            return _userDal.GetUserOperationClaims(userId);
+        }
+
         public IDataResult<User> GetById(int id)
         {
             return new SuccessDataResult<User>(_userDal.Get(p=>p.Id == id));

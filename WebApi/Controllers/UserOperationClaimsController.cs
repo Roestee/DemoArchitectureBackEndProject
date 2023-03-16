@@ -1,5 +1,4 @@
-﻿using Business.Repositories.OperationClaimRepository;
-using Business.Repositories.UserOperationClaimRepository;
+﻿using Business.Repositories.UserOperationClaimRepository;
 using Entities.Concrete;
 using Microsoft.AspNetCore.Mvc;
 
