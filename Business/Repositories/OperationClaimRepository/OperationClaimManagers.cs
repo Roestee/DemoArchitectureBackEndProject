@@ -1,6 +1,7 @@
 ﻿using Business.Aspects.Secured;
 using Business.Repositories.OperationClaimRepository.Constans;
 using Business.Repositories.OperationClaimRepository.Validation.FleuntValidation;
+using Core.Aspects.Performance;
 using Core.Aspects.Validation;
 using Core.Utilities.Business;
 using Core.Utilities.Result.Abstract;
@@ -46,6 +47,7 @@ namespace Business.Repositories.OperationClaimRepository
         }
 
         [SecuredAspect("Admin")]
+        [PerformanceAspect()]
         public IDataResult<List<OperationClaim>> GetList()
         {
             return new SuccessDataResult<List<OperationClaim>>(_operationClaimDal.GetAll());
